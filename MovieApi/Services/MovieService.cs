@@ -16,7 +16,9 @@ namespace MovieApi.Services
 
         public Stats[] Get()
         {
-            var movies = _query.GetMetadata();
+            var allMetadata = _query.GetMetadata();
+            var movies = GroupMetadataById(allMetadata);
+            
             var statsLookup = _query.GetStatsLookup();
             return GetStats(movies, statsLookup)
                 .OrderByDescending(x => x.Watches)
@@ -44,6 +46,15 @@ namespace MovieApi.Services
         {
             var averageDuration = (int) statsLookup[movieId].Average() / 1000;
             return (statsLookup[movieId].Count(), averageDuration);
+        }
+
+        private static Metadata[] GroupMetadataById(Metadata[] metadata)
+        {
+            return metadata
+                .GroupBy(m => m.MovieId, m => m)
+                .Select(g => g.OrderByDescending(o => o.Id))
+                .Select(g => g.FirstOrDefault(f => f.Language == "EN"))
+                .ToArray();
         }
     }
 }
