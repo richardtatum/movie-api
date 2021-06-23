@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MovieApi.Interfaces;
+using MovieApi.Repositories;
+using MovieApi.Services;
 
 namespace MovieApi
 {
@@ -19,6 +22,8 @@ namespace MovieApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSingleton<IQueryRepository, QueryRepository>();
+            services.AddTransient<IMovieService, MovieService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
