@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using MovieApi.Interfaces;
 using MovieApi.Models;
 
 namespace MovieApi.Controllers
@@ -8,18 +8,17 @@ namespace MovieApi.Controllers
     [Route("[controller]")]
     public class MoviesController : ControllerBase
     {
+        private readonly IMovieService _service;
+        public MoviesController(IMovieService service)
+        {
+            _service = service;
+        }
         
         [HttpGet]
+        [Route("stats")]
         public Stats[] Get()
         {
-            return Enumerable.Range(1, 15).Select(x => new Stats
-            {
-                MovieId = x,
-                AverageWatchDurationS = x * 1000,
-                ReleaseYear = 1999,
-                Title = "Best Movie",
-                Watches = x * 3
-            }).ToArray();
+            return _service.Get();
         }
     }
 }
