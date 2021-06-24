@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using MovieApi.Extensions;
 using MovieApi.Interfaces;
 using MovieApi.Models;
 
@@ -36,7 +37,7 @@ namespace MovieApi.Services
         private static Metadata[] Filter(IEnumerable<Metadata> metadata, int movieId)
         {
             return metadata
-                .Where(m => m.MovieId == movieId)
+                .Where(m => m.MovieId == movieId && m.IsValid())
                 .GroupBy(m => m.Language, m => m)
                 .Select(g => g.OrderByDescending(m => m.Id).FirstOrDefault())
                 .OrderBy(m => m?.Language)
