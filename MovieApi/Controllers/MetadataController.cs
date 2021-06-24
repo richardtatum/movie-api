@@ -25,7 +25,7 @@ namespace MovieApi.Controllers
                 var metadata = _service.Get(id);
                 return Ok(metadata);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return NotFound();
             }
