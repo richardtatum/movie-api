@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
+using MovieApi.Interfaces;
 using MovieApi.Models;
 
 namespace MovieApi.Controllers
@@ -7,26 +9,33 @@ namespace MovieApi.Controllers
     [Route("[controller]")]
     public class MetadataController : ControllerBase
     {
+        private readonly IMetadataService _service;
+
+        public MetadataController(IMetadataService service)
+        {
+            _service = service;
+        }
+        
         [HttpGet]
-        [Route("{id:int}")]
         [Route(":{id:int}")]
         public IActionResult Get(int id)
         {
-            if (id > 5) return StatusCode(404);
-            return new JsonResult(new Metadata
+            try
             {
-                MovieId = id,
-                Title = "Baby Driver",
-                Language = "EN",
-                Duration = "1:39:00",
-                ReleaseYear = 2018
-            });
+                var metadata = _service.Get(id);
+                return Ok(metadata);
+            }
+            catch (Exception ex)
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost]
         public IActionResult Post(Metadata model)
         {
-            return StatusCode(200);
+            var result = _service.Post(model);
+            return Ok();
         }
     }
 }
