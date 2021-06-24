@@ -17,7 +17,7 @@ namespace MovieApi.Controllers
         }
         
         [HttpGet]
-        [Route(":{id:int}")]
+        [Route("{id:int}")]
         public IActionResult Get(int id)
         {
             try
