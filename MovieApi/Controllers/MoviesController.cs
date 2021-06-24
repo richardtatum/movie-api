@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieApi.Interfaces;
-using MovieApi.Models;
 
 namespace MovieApi.Controllers
 {
@@ -16,9 +15,10 @@ namespace MovieApi.Controllers
         
         [HttpGet]
         [Route("stats")]
-        public Stats[] Get()
+        public IActionResult Get()
         {
-            return _service.Get();
+            var stats = _service.Get();
+            return Ok(stats);
         }
     }
 }
