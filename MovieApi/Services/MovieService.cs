@@ -17,7 +17,7 @@ namespace MovieApi.Services
         public Stats[] Get()
         {
             var allMetadata = _query.GetMetadata();
-            var movies = GroupMetadataById(allMetadata);
+            var movies = Filter(allMetadata);
             
             var statsLookup = _query.GetStatsLookup();
             return GetStats(movies, statsLookup)
@@ -26,7 +26,7 @@ namespace MovieApi.Services
                 .ToArray();
         }
 
-        private IEnumerable<Stats> GetStats(Metadata[] movies, ILookup<int, int> statsLookup)
+        private static IEnumerable<Stats> GetStats(Metadata[] movies, ILookup<int, int> statsLookup)
         {
             foreach (var movie in movies)
             {
@@ -48,7 +48,8 @@ namespace MovieApi.Services
             return (statsLookup[movieId].Count(), averageDuration);
         }
 
-        private static Metadata[] GroupMetadataById(Metadata[] metadata)
+        // Filters metadata, grouping by movie id, then selecting the highest Id item with in the english language
+        private static Metadata[] Filter(Metadata[] metadata)
         {
             return metadata
                 .GroupBy(m => m.MovieId, m => m)
