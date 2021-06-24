@@ -35,7 +35,9 @@ namespace MovieApi.Controllers
         public IActionResult Post(Metadata model)
         {
             var result = _service.Post(model);
-            return Ok();
+            
+            if (result) return Ok();
+            return BadRequest();
         }
     }
 }
